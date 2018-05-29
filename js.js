@@ -53,12 +53,9 @@ $('#addForm').submit(function(e) {
     if (errMsg.length > 0) {
         alert(errMsg);
     } else {
-        //$('#addForm').unbind().submit();
         $.ajax({
             type: "POST",
             url: url,
-            //contentType: "application/json; charset=utf-8",
-            //dataType: "JSON",
             data: {
                 id: id.val(),
                 name: Name.val(),
@@ -87,8 +84,6 @@ $('#tab_2').click(function(e) {
         type: "GET",
         url: url,
         data: { action: 'getAll' },
-        //contentType: "application/json; charset=utf-8",
-        //dataType: "JSON",
         success: function(response) {
             cl(response.list);
             if (response.list) {
@@ -100,7 +95,6 @@ $('#tab_2').click(function(e) {
                     );
                     tr.appendTo($('#allTable'));
                 });
-                //$('#allTable').html(JSON.stringify(response.list));
             }
         }
     });
@@ -128,8 +122,6 @@ $('#getOne').submit(function(e) {
                 action: 'getOne',
                 id: id.val()
             },
-            //contentType: "application/json; charset=utf-8",
-            //dataType: "JSON",
             success: function(response) {
                 // cl('get one success:', response);
                 if (response.error) {
@@ -165,8 +157,6 @@ $('#delete').submit(function(e) {
                     action: 'delete',
                     id: id.val()
                 },
-                //contentType: "application/json; charset=utf-8",
-                //dataType: "JSON",
                 success: function(response) {
                     //cl('delete success:', response);
                     if (response.error) {
@@ -210,8 +200,6 @@ $('#update').submit(function(e) {
                 id: id.val(),
                 name: Name.val()
             },
-            //contentType: "application/json; charset=utf-8",
-            //dataType: "JSON",
             success: function(response) {
                 if (response.error) {
                     alert(JSON.stringify(response.error));
