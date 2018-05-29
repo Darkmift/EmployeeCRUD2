@@ -70,7 +70,7 @@ $('#addForm').submit(function(e) {
                 if (response.error) {
                     alert(JSON.stringify(response.error));
                 } else {
-                    alert('New entry added!: ' + JSON.stringify(response.newUser));
+                    alert('New entry added!: ' + response.success.name);
                 }
 
             }
