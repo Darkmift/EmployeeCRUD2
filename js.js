@@ -207,12 +207,17 @@ $('#update').submit(function(e) {
             url: url,
             data: {
                 action: 'update',
-                id: id.val()
+                id: id.val(),
+                name: Name.val()
             },
             //contentType: "application/json; charset=utf-8",
             //dataType: "JSON",
             success: function(response) {
-                cl(response);
+                if (response.error) {
+                    alert(JSON.stringify(response.error));
+                } else {
+                    alert('Employee record(' + id.val() + ') updated succesfully!');
+                }
             }
         });
     }

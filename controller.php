@@ -1,11 +1,6 @@
 <?php
 header('Content-Type: application/json');
 require 'PDO.php';
-//echo json_encode($data);
-// echo var_dump($_POST);
-// echo $_POST['id'];
-// echo $_POST['name'];
-// echo $_POST['recruitment_date'];
 $errMsg = array();
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
@@ -18,13 +13,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 $id = filter_var($_GET['id'], FILTER_SANITIZE_STRING);
                 triggerDB('getOne', $id, $conn);
                 break;
-            default:
-                # code...
-                break;
         }
-        //echo json_encode(array("success" => 'getAll'));
-        // triggerDB('addNew', $data, $conn);
-        // http_response_code(200);
         break;
     case 'POST':
         //filter input
@@ -59,6 +48,17 @@ switch ($_SERVER['REQUEST_METHOD']) {
         parse_str(file_get_contents('php://input'), $request_vars);
         $id = filter_var($request_vars['id'], FILTER_SANITIZE_STRING);
         triggerDB('delete', $id, $conn);
+        http_response_code(200);
+        break;
+    case 'PUT':
+        $request_vars = array();
+        parse_str(file_get_contents('php://input'), $request_vars);
+        $id = filter_var($request_vars['id'], FILTER_SANITIZE_STRING);
+        $name = filter_var($request_vars['name'], FILTER_SANITIZE_STRING);
+        $data = new stdClass();
+        $data->id = $id;
+        $data->name = $name;
+        triggerDB('update', $data, $conn);
         http_response_code(200);
         break;
     default:
@@ -138,6 +138,35 @@ function triggerDB($action, $inputObj, $conn)
             $output->success = "no errors in execution";
             echo json_encode($output);
             break;
-
+        case 'update':
+            try
+            {
+                // prepare and bind
+                $stmt = $conn->prepare("UPDATE employees SET name= :name WHERE id=:id");
+                $stmt->bindParam(':id', $inputObj->id, PDO::PARAM_INT);
+                $stmt->bindParam(':name', $inputObj->name, PDO::PARAM_STR);
+                $stmt->execute();
+            } catch (PDOException $e) {
+                //echo $e->getMessage();
+                $output = new stdClass();
+                $output->error = $e->errorInfo;
+                echo json_encode($output);
+                break;
+            }
+            $count = $stmt->rowCount();
+            if ($stmt->rowCount() > 0) {
+                $stmt = $conn->prepare("SELECT * FROM employees WHERE id=:id");
+                $stmt->execute(['id' => $inputObj->id]);
+                $user = $stmt->fetch();
+                $output = new stdClass();
+                $output->success = true;
+                $output->newUser = $user;
+                echo json_encode($output);
+            } else {
+                $output = new stdClass();
+                $output->error = "employee Id $inputObj->id not found,update aborted";
+                echo json_encode($output);
+            }
+            break;
     }
 }
