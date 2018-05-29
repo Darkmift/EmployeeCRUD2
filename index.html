@@ -77,17 +77,18 @@
                 <!-- Update Employee info div -->
                 <div class="content" id="tab_4_content">
                     <h2>Update Employee Form</h2>
-                    <div class="form-group">
-                        <label>FullName</label>
-                        <input type="text" placeholder="Name here" class="input-control" />
-                        <label>EmployeeID</label>
-                        <input placeholder="EXSISTING Id here" class="input-control" />
-                        <label>Recruitment Date</label>
-                        <input type="date" class="input-control" />
-                    </div>
-                    <div class="form-group">
-                        <button>Submit</button>
-                    </div>
+                    <br>
+                    <form id="update" method="PUT" action="controller.php">
+                        <div class="form-group">
+                            <label>FullName</label>
+                            <input name="name" type="text" placeholder="Name here" class="input-control" />
+                            <label>EmployeeID</label>
+                            <input name="id" type="number" placeholder="Existing Id here" class="input-control" />
+                        </div>
+                        <div class="form-group">
+                            <button>Submit</button>
+                        </div>
+                    </form>
                 </div>
                 <!-- Delete Employee Select-->
                 <div class="content" id="tab_5_content">

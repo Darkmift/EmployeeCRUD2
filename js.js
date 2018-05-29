@@ -179,6 +179,41 @@ $('#delete').submit(function(e) {
         } else {
             alert('delete request for: id(' + id.val() + ') aborted!');
         }
+    }
+});
 
+$('#update').submit(function(e) {
+    e.preventDefault();
+    cl('update clicked');
+    id = $('#update :input[name="id"]');
+    //Name instead of name because js no likey this
+    Name = $('#update :input[name="name"]');
+    var errMsg = "";
+    cl('addForm submit validation start');
+    if (!Name.val()) {
+        errMsg += Name.attr("name") + ' input is empty!\n';
+    }
+    if (!id.val()) {
+        errMsg += id.attr("name") + ' input is empty!';
+    }
+    if (id.val().length > 9) {
+        errMsg += id.attr("name") + ' length is greater than 9!';
+    }
+    if (errMsg.length > 0) {
+        alert(errMsg);
+    } else {
+        $.ajax({
+            type: "PUT",
+            url: url,
+            data: {
+                action: 'update',
+                id: id.val()
+            },
+            //contentType: "application/json; charset=utf-8",
+            //dataType: "JSON",
+            success: function(response) {
+                cl(response);
+            }
+        });
     }
 });
