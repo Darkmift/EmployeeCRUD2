@@ -18,11 +18,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'POST':
         //filter input
         $id = filter_var($_POST['id'], FILTER_SANITIZE_STRING);
-        //$id = "+694564334453435";
         $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
         $recruitment_date = filter_var($_POST['recruitment_date'], FILTER_SANITIZE_STRING);
-        //$recruitment_date = "boobs";
-
+ 
         //validate input
         if (strlen($id) > 9) {
             array_push($errMsg, array('notice' => 'id length too big!'));
@@ -36,7 +34,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
             http_response_code(400);
             break;
         }
-
         $data = new stdClass();
         $data->id = $id;
         $data->name = $name;
@@ -82,35 +79,21 @@ function triggerDB($action, $inputObj, $conn)
                 //echo $e->getMessage();
                 if ($e->errorInfo[1] == 1062) {
                     output('error', "Employee id($inputObj->id) already exist!");
-                    // $output = new stdClass();
-                    // $output->error = "Employee id($inputObj->id) for $inputObj->name already exist!";
-                    // echo json_encode($output);
                     break;
                 }
                 output('error', $e->errorInfo);
-                // $output = new stdClass();
-                // $output->error = $e->errorInfo;
-                // echo json_encode($output);
                 break;
             }
             $stmt = $conn->prepare("SELECT * FROM employees WHERE id=:id");
             $stmt->execute(['id' => $inputObj->id]);
             $user = $stmt->fetch();
             output('success', $user);
-            // $output = new stdClass();
-            // $output->success = true;
-            // $output->newUser = $user;
-            // echo json_encode($output);
             break;
         case 'getAll':
             $stmt = $conn->prepare("SELECT * FROM employees");
             $stmt->execute();
             $list = $stmt->fetchAll();
             output('success', $list);
-            // $output = new stdClass();
-            // $output->success = true;
-            // $output->list = $list;
-            // echo json_encode($output);
             break;
         case 'getOne':
             $stmt = $conn->prepare("SELECT * FROM employees WHERE id=:id");
@@ -118,15 +101,8 @@ function triggerDB($action, $inputObj, $conn)
             $user = $stmt->fetch();
             if ($stmt->rowCount() > 0) {
                 output('success', $user);
-                // $output = new stdClass();
-                // $output->success = true;
-                // $output->newUser = $user;
-                // echo json_encode($output);
             } else {
                 output('error', "Employee id($inputObj) does not exist in DB!");
-                // $output = new stdClass();
-                // $output->error = "Employee id($inputObj) does not exist in DB!";
-                // echo json_encode($output);
             }
             break;
         case 'delete':
@@ -137,15 +113,9 @@ function triggerDB($action, $inputObj, $conn)
                 $stmt->execute(['id' => $inputObj]);
             } catch (PDOException $e) {
                 output('error', $e->errorInfo);
-                // $output = new stdClass();
-                // $output->error = $e->errorInfo;
-                // echo json_encode($output);
                 break;
             }
             output('success', "no errors in execution");
-            // $output = new stdClass();
-            // $output->success = "no errors in execution";
-            // echo json_encode($output);
             break;
         case 'update':
             try
@@ -157,10 +127,6 @@ function triggerDB($action, $inputObj, $conn)
                 $stmt->execute();
             } catch (PDOException $e) {
                 output('error', $e->errorInfo);
-                //echo $e->getMessage();
-                // $output = new stdClass();
-                // $output->error = $e->errorInfo;
-                // echo json_encode($output);
                 break;
             }
             $count = $stmt->rowCount();
@@ -169,15 +135,8 @@ function triggerDB($action, $inputObj, $conn)
                 $stmt->execute(['id' => $inputObj->id]);
                 $user = $stmt->fetch();
                 output('success', $user);
-                // $output = new stdClass();
-                // $output->success = true;
-                // $output->newUser = $user;
-                // echo json_encode($output);
             } else {
                 output('error', "employee Id $inputObj->id not found,update aborted");
-                // $output = new stdClass();
-                // $output->error = "employee Id $inputObj->id not found,update aborted";
-                // echo json_encode($output);
             }
             break;
     }
