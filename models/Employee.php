@@ -1,5 +1,5 @@
 <?php
-require_once 'PDOClass.php';
+require 'PDOClass.php';
 
 class Employee
 {
@@ -17,6 +17,8 @@ class Employee
     public function getAll()
     {
         $database = PDOClass::getInstance();
+        // var_dump($database);
+        // die();
         $database->query("SELECT * FROM " . $this->table);
         return $database->resultSet();
     }

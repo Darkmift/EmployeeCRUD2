@@ -1,6 +1,6 @@
 <?php
 
-require_once 'models/Employee.php';
+require 'models/Employee.php';
 $employeeData = new Employee();
 $employeeData->getAll();
 ?>

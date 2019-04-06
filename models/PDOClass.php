@@ -2,10 +2,10 @@
 
 class PDOClass
 {
-    private static $_instance = null;
-    private $_stmt;
+
+    #config
     private $serverHost = 'localhost';
-    private $dbname = 'employee';
+    private $dbname = 'employees';
     private $userName = 'root';
     private $passWord = '';
     private $pdoConfig = [
@@ -13,14 +13,19 @@ class PDOClass
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES => false,
     ];
-    
+
+    private static $_instance = null;
+    private $dbhost;
+    private $_stmt;
+
     //init PDO obj for pre conn
     function __construct()
     {
         try {
-            $this->dbhost = new PDO('mysql:host=' . $this->$serverHost . ';dbname=' . $this->$dbname, $this->$userName, $this->$passWord, $this->$pdoConfig);
+            $this->dbhost = new PDO('mysql:host=' . $this->serverHost . ';dbname=' . $this->dbname, $this->userName, $this->passWord, $this->pdoConfig);
         } catch (PDOException $e) {
-            $this->error = $e->getMessage();
+            // $this->error = $e->getMessage();
+            die('error connecting to databse');
         }
     }
 
