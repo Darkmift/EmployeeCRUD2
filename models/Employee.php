@@ -17,8 +17,6 @@ class Employee
     public function getAll()
     {
         $database = PDOClass::getInstance();
-        // var_dump($database);
-        // die();
         $database->query("SELECT * FROM " . $this->table);
         return $database->resultSet();
     }

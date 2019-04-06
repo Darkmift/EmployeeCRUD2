@@ -64,13 +64,13 @@
       vertical-align: middle;
     }
 
-    table.table tr th:first-child {
-      width: 60px;
+    /* table.table tr th:nth-child(1) {
+      width: 22vw;
     }
 
     table.table tr th:last-child {
-      width: 100px;
-    }
+      width: 30vw;
+    } */
 
     table.table-striped tbody tr:nth-of-type(odd) {
       background-color: #fcfcfc;
