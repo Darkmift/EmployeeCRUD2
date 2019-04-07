@@ -6,7 +6,10 @@
           <h2>Employee <b>Management</b></h2>
         </div>
         <div class="col-sm-7">
-          <a href="#" class="btn btn-primary"><i class="material-icons">&#xE147;</i> <span>Add New User</span></a>
+          <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addNew">
+            <i class="material-icons">&#xE147;</i>
+            <span>Add New User</span>
+          </a>
         </div>
       </div>
     </div>
@@ -22,7 +25,7 @@
       </thead>
       <tbody>
 <?php
-require $mainDir.'\controller\tbody.php';
+require $mainDir . '\controller\tbody.php';
 ?>
       </tbody>
     </table>
@@ -40,3 +43,6 @@ require $mainDir.'\controller\tbody.php';
     </div>
   </div>
 </div>
+<?php
+require_once 'modal.html';
+?>
