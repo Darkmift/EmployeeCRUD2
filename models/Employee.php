@@ -34,23 +34,32 @@ class Employee
     }
 
     //modify row
-    public function update($serial_num, $param, $newVal)
+    public function update($id, array $params)
     {
         $database = PDOClass::getInstance();
-        $database->query("UPDATE " . $this->table . " SET `:param` = :value WHERE `serial_num` = :serial_num");
-        $database->bind(':param', $param);
-        $database->bind(':value', $newVal, PDO::PARAM_STR);
-        $database->bind(':serial_num', $serial_num, PDO::PARAM_STR);
+
+        $query = "UPDATE " . $this->table . " SET ";
+        foreach ($params as $key => $value) {
+            $query .= "`$key`= :$key,";
+        }
+        $query = rtrim($query, ',');
+        $query .= ' WHERE `id`= :id';
+        $database->query($query);
+
+        foreach ($params as $key => $value) {
+            $database->bind(":$key", $value, PDO::PARAM_STR);
+        }
+        $database->bind(":id", $id, PDO::PARAM_INT);
         $database->execute();
         $database->terminate();
     }
 
     //delete row
-    public function delete($serial_num)
+    public function delete($id)
     {
         $database = PDOClass::getInstance();
-        $database->query("DELETE FROM " . $this->table . " WHERE `serial_num` = :serial_num");
-        $database->bind(':serial_num', $serial_num, PDO::PARAM_STR);
+        $database->query("DELETE FROM " . $this->table . " WHERE `id` = :id");
+        $database->bind(':id', $id, PDO::PARAM_STR);
         $database->execute();
         $database->terminate();
     }

@@ -1,30 +1,42 @@
 <?php
-require 'models/Employee.php';
-$employeeData = new Employee();
-$employee_list;
-try {
-    $employee_list = $employeeData->getAll();
-} catch (PDOEXCEPTION $e) {
-    $employeeData = array();
-    $employee_list = $employeeData['error']['errorMsg'] = 'Action failed! Error Code: ' . $e->getCode();
-}
-if (isset($_POST['edit_id'])) {
-    $edit_id = filter_var($_POST['edit_id'], FILTER_SANITIZE_NUMBER_INT);
-    $action = $id = filter_var($_POST['action'], FILTER_SANITIZE_STRING);
-    // print_r([$edit_id, $action]);
-    foreach ($employee_list as $employee_location_int => $employee_array) {
-        if ($employee_array['id'] == $edit_id) {
-            print_r($employee_array);
-            $employee_list[$employee_location_int]['edit'] = true;
-        }
-    }
+require 'Controller.php';
 
+$employee_list = Controller::getList();
+
+if (isset($_POST['action'])) {
+
+    // prettyPrintR($_POST);
+
+    $action = Controller::sanitize($_POST['action']);
+    $edit_id = Controller::sanitize($_POST['edit_id']);
+
+    //init list pass to tbody
+    $employee_list = Controller::edit($employee_list, $edit_id, $action);
+    //save row that activated post
+    $original = $employee_list[0][$employee_list[1]];
+    //send list to body
+    $employee_list = $employee_list[0];
+
+    echo $_POST['action'];
     switch ($action) {
-        case 'update':
+        case 'confirm':
+            if (Controller::confirm($_POST, $original)) {
+                $employee_list = Controller::getList();
+            }
             break;
 
-        case 'delete':
+        case 'remove':
+            Controller::delete($edit_id);
+            $employee_list = Controller::getList();
+            break;
+
+        default:
             # code...
             break;
     }
+}
+
+function prettyPrintR($param)
+{
+    print("<pre>" . print_r($param, true) . "</pre><hr>");
 }
